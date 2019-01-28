@@ -1,0 +1,41 @@
+{
+	"name": "@arcsine/screen-recorder",
+	"version": "0.1.0",
+	"description": "Leverages FFMpeg to perform screen recordings",
+	"license": "MIT",
+	"repository": "arciisine/screen-recorder",
+	"author": {
+		"name": "Timothy Soehnlin",
+		"email": "timothy.soehnlin@gmail.com",
+		"url": "github.com/arciisine"
+	},
+	"engines": {
+		"node": ">=8"
+	},
+	"scripts": {},
+	"maintainers": [
+		{
+			"name": "Timothy Soehnlin",
+			"url": "https://github.com/arciisine"
+		}
+	],
+	"files": [
+		"index.js",
+		"index.d.ts",
+		"src/**/*.js"
+	],
+	"keywords": [
+		"macos",
+		"linux",
+		"x11",
+		"win32",
+		"Leverages FFMpeg to perform screen recordings"
+	],
+	"devDependencies": {
+		"@types/node": "^10.12.18",
+		"typescript": "^3.2.4"
+	},
+	"dependencies": {
+		"@arcsine/process-win": "^0.1.2"
+	}
+}
