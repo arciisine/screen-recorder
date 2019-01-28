@@ -2,7 +2,7 @@ import * as os from 'os';
 import * as path from 'path';
 
 import { Util } from './util';
-import { RecordingOptions } from './types';
+import { RecordingOptions, GIFOptions } from './types';
 import { OSUtil } from './os';
 
 export class FFmpegUtil {
@@ -175,7 +175,7 @@ export class FFmpegUtil {
     };
   }
 
-  static async generateGIF(opts: RecordingOptions & { scale?: number }) {
+  static async generateGIF(opts: GIFOptions) {
     const ffmpeg = opts.ffmpegBinary;
 
     if (!ffmpeg) {
@@ -193,12 +193,12 @@ export class FFmpegUtil {
 
     vf = `${vf}:flags=lanczos`;
 
-    const paletteFile = path.resolve(os.tmpdir(), 'palette-gen.png');
+    const paletteFile = path.resolve(os.tmpdir(), `palette-gen.${Math.random()}.${Date.now()}.png`);
     const final = opts.file.replace('.mp4', '.gif');
 
     const { finish: finishPalette } = Util.processToPromise(ffmpeg, [
       '-i', opts.file,
-      '-vf', `${vf},palettegen=stats_mode=diff`,
+      '-vf', `${vf}, palettegen = stats_mode = diff`,
       '-y', paletteFile
     ]);
 

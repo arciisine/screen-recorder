@@ -13,10 +13,19 @@ export interface RecordingOptions {
 
   ffmpegBinary?: string;
   fps?: number;
-  animatedGif?: boolean;
   audio?: boolean;
   duration?: number;
   countdown?: number;
   transcode?: any;
   flags?: any;
+}
+
+export interface GIFOptions {
+  file: string;
+  window: {
+    bounds
+  };
+  scale?: number;
+  ffmpegBinary?: string;
+  fps?: number;
 }
