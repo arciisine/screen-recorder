@@ -36,6 +36,6 @@
 		"typescript": "^3.2.4"
 	},
 	"dependencies": {
-		"@arcsine/process-win": "^0.1.2"
+		"@arcsine/process-win": "^0.1.3"
 	}
 }

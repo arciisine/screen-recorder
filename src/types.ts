@@ -8,11 +8,11 @@ export interface Bounds {
 }
 
 export interface RecordingOptions {
-  ffmpegBinary: string;
-  fps: number;
   window: win.Response;
   file: string;
 
+  ffmpegBinary?: string;
+  fps?: number;
   animatedGif?: boolean;
   audio?: boolean;
   duration?: number;

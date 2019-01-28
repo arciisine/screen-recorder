@@ -1,8 +1,29 @@
+import * as path from 'path';
+import * as fs from 'fs';
+import * as util from 'util';
+
 import * as win from '@arcsine/process-win';
 
 import { Util } from './util';
 
+const exists = util.promisify(fs.exists);
+
 export class OSUtil {
+
+  static async findFileOnPath(name: string, extra: string[] = []) {
+    const paths = (process.env.PATH || '')
+      .split(path.delimiter)
+      .map(x => path.resolve(x, name));
+
+    paths.unshift(...extra);
+
+    for (const p of paths) {
+      if (await exists(p)) {
+        return p;
+      }
+    }
+    throw new Error(`Cannot find ${name} on path`);
+  }
 
   static async openFile(file: string) {
     let cmd: string;
@@ -18,8 +39,8 @@ export class OSUtil {
     await Util.processToPromise(cmd, args);
   }
 
-  static async getActiveWindow() {
-    const info = await win.getActive();
+  static async getWindow(pid?: number) {
+    const info = await (pid ? win.get(pid) : win.getActive());
     const b = info.bounds!;
 
     if (process.platform !== 'darwin') {

@@ -147,6 +147,10 @@ export class FFmpegUtil {
   }
 
   static async launchProcess(opts: RecordingOptions) {
+    if (!opts.ffmpegBinary) {
+      opts.ffmpegBinary = await OSUtil.findFileOnPath(process.platform === 'win32' ? 'ffmpeg.exe' : 'ffmpeg');
+    }
+
     let args: string[];
 
     switch (process.platform) {
