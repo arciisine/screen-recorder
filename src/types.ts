@@ -1,4 +1,5 @@
 import * as win from '@arcsine/win-info';
+import { ChildProcess } from 'child_process';
 
 export interface Bounds {
   x: number;
@@ -28,4 +29,15 @@ export interface GIFOptions {
   scale?: number;
   ffmpegBinary?: string;
   fps?: number;
+}
+
+export interface RecordingResult {
+  finish: Promise<RecordingOptions>;
+  proc: ChildProcess;
+  stop: () => void;
+}
+
+export interface GIFResult {
+  finish: Promise<string>;
+  stop: (now?: boolean) => void;
 }

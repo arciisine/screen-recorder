@@ -1,5 +1,3 @@
-import * as win from '@arcsine/win-info';
-
 import { RecordingOptions, GIFOptions } from './types';
 import { FFmpegUtil } from './ffmpeg';
 import { OSUtil } from './os';

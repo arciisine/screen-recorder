@@ -2,7 +2,7 @@ import * as os from 'os';
 import * as path from 'path';
 
 import { Util } from './util';
-import { RecordingOptions, GIFOptions } from './types';
+import { RecordingOptions, GIFOptions, RecordingResult, GIFResult } from './types';
 import { OSUtil } from './os';
 
 export class FFmpegUtil {
@@ -151,10 +151,15 @@ export class FFmpegUtil {
     return out;
   }
 
-  static async startRecording(opts: RecordingOptions) {
+  static async findFFmpegBinIfMissing<T extends { ffmpegBinary?: string }>(opts: T): Promise<T & { ffmpegBinary: string }> {
     if (!opts.ffmpegBinary) {
       opts.ffmpegBinary = await OSUtil.findFileOnPath(process.platform === 'win32' ? 'ffmpeg.exe' : 'ffmpeg');
     }
+    return opts as T & { ffmpegBinary: string };
+  }
+
+  static async startRecording(options: RecordingOptions): Promise<RecordingResult> {
+    const opts = await this.findFFmpegBinIfMissing(options);
 
     let args: string[];
 
@@ -185,13 +190,10 @@ export class FFmpegUtil {
     };
   }
 
-  static async generateGIF(opts: GIFOptions) {
+  static async generateGIF(options: GIFOptions): Promise<GIFResult> {
+    const opts = await this.findFFmpegBinIfMissing(options);
+
     const ffmpeg = opts.ffmpegBinary;
-
-    if (!ffmpeg) {
-      return;
-    }
-
     const { bounds } = opts.window;
 
     let vf = `fps=${opts.fps}`;
@@ -223,6 +225,6 @@ export class FFmpegUtil {
       '-y', final
     ]);
 
-    return { finish: finish.then(x => final), kill };
+    return { finish: finish.then(x => final), stop: kill };
   }
 }
