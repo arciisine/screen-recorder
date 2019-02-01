@@ -1,4 +1,4 @@
-import * as win from '@arcsine/process-win';
+import * as win from '@arcsine/win-info';
 
 export interface Bounds {
   x: number;
@@ -8,8 +8,8 @@ export interface Bounds {
 }
 
 export interface RecordingOptions {
-  window: win.Response;
   file: string;
+  window: win.Response;
 
   ffmpegBinary?: string;
   fps?: number;
@@ -23,7 +23,7 @@ export interface RecordingOptions {
 export interface GIFOptions {
   file: string;
   window: {
-    bounds
+    bounds: Bounds
   };
   scale?: number;
   ffmpegBinary?: string;

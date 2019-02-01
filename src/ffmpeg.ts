@@ -39,7 +39,7 @@ export class FFmpegUtil {
 
   static async getWin32Args(opts: RecordingOptions) {
     const getAll = this.getAll.bind(this, opts.flags || {});
-    const devs = await OSUtil.getWinDevices(opts.ffmpegBinary, opts.audio);
+    const devs = await OSUtil.getWinDevices(opts.ffmpegBinary!, opts.audio);
     const out: string[] = [];
     const win = opts.window;
 
@@ -81,7 +81,7 @@ export class FFmpegUtil {
     const { window: { bounds, screens } } = opts;
 
     const getAll = this.getAll.bind(this, opts.flags || {});
-    const devs = await OSUtil.getMacInputDevices(opts.ffmpegBinary, opts.window, opts.audio);
+    const devs = await OSUtil.getMacInputDevices(opts.ffmpegBinary!, opts.window, opts.audio);
 
     const screen = screens.find(s => // Grab screen which has the top-left corner
       bounds.x >= s.x && bounds.x <= s.x + s.width &&

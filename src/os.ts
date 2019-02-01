@@ -1,8 +1,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import * as util from 'util';
-
-import * as win from '@arcsine/process-win';
+import * as win from '@arcsine/win-info';
 
 import { Util } from './util';
 
@@ -40,7 +39,7 @@ export class OSUtil {
   }
 
   static async getWindow(pid?: number) {
-    const info = await (pid ? win.get(pid) : win.getActive());
+    const info = await (pid ? win.getByPid(pid) : win.getActive());
     const b = info.bounds!;
 
     if (process.platform !== 'darwin') {
