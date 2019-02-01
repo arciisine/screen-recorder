@@ -22,8 +22,16 @@ export class FFmpegUtil {
       crf: 10,
       pix_fmt: 'yuv420p',
       'c:v': 'libx264',
+      y: '',
     }
   };
+
+  private static getCommon(opts: RecordingOptions) {
+    return [
+      ...this.getAll(opts.flags || {}, this.recordingArgs.common),
+      ...(opts.fps ? ['-r', `${opts.fps}`] : [])
+    ];
+  }
 
   private static get(src: any, key: string, target: any, customKeyOverride?: string) {
     const val = src[customKeyOverride || key] || target[key];
@@ -48,8 +56,7 @@ export class FFmpegUtil {
     }
 
     out.push(
-      ...getAll(this.recordingArgs.common),
-      '-r', `${opts.fps}`,
+      ...this.getCommon(opts),
       '-video_size', `${win.bounds.width}x${win.bounds.height}`,
     );
 
@@ -93,8 +100,7 @@ export class FFmpegUtil {
     }
     out.push(
       '-capture_cursor', '1',
-      ...getAll(this.recordingArgs.common),
-      '-r', `${opts.fps}`,
+      ...this.getCommon(opts),
       // '-video_size', `${bounds.width}x${bounds.height}`,
       '-f', 'avfoundation',
       '-i', `${devs.video}:${devs.audio}`
@@ -124,8 +130,7 @@ export class FFmpegUtil {
     }
 
     out.push(
-      ...getAll(this.recordingArgs.common),
-      '-r', `${opts.fps}`,
+      ...this.getCommon(opts),
       '-video_size', `${bounds.width}x${bounds.height}`,
       '-f', 'x11grab',
       '-i', `:0.0+${bounds.x},${bounds.y}`,
@@ -156,9 +161,14 @@ export class FFmpegUtil {
     switch (process.platform) {
       case 'win32': args = await this.getWin32Args(opts); break;
       case 'darwin': args = await this.getDarwinArgs(opts); break;
-      default:
+      case 'linux':
+      case 'freebsd':
+      case 'openbsd':
+      case 'sunos':
         args = await this.getX11Args(opts);
         break;
+      default:
+        throw new Error(`Unsupported platform: ${process.platform}`);
     }
 
     const { finish, kill, proc } = await Util.processToPromise(opts.ffmpegBinary, [...args, opts.file]);
