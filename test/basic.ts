@@ -1,4 +1,4 @@
-import { Recorder } from './src';
+import { Recorder, GIFCreator } from '../src';
 
 (async function () {
   const { finish } = await Recorder.recordActiveWindow({
@@ -9,6 +9,10 @@ import { Recorder } from './src';
 
   const finalOpts = await finish;
 
-  const gifOpts = await Recorder.generateGIF(finalOpts);
+  const gifOpts = await GIFCreator.generate({
+    ...finalOpts,
+    scale: .25,
+    output: 'funny.gif'
+  });
   await gifOpts!.finish;
 })();

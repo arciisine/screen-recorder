@@ -4,3 +4,4 @@ node_modules
 .DS_STORE
 test*.mp4
 test*.gif
+lib/

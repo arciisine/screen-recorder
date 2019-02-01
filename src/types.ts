@@ -10,31 +10,38 @@ export interface Bounds {
 
 export interface RecordingOptions {
   file: string;
-  window: win.Response;
-
-  ffmpegBinary?: string;
   fps?: number;
   audio?: boolean;
   duration?: number;
-  countdown?: number;
-  transcode?: any;
-  flags?: any;
+
+  window: win.Response;
+
+  ffmpeg?: {
+    binary?: string;
+    transcode?: any;
+    flags?: any;
+  };
 }
 
 export interface GIFOptions {
   file: string;
+  output?: string;
+  fps?: number;
+  scale?: number;
+
   window: {
     bounds: Bounds
   };
-  scale?: number;
-  ffmpegBinary?: string;
-  fps?: number;
+
+  ffmpeg?: {
+    binary?: string;
+  };
 }
 
 export interface RecordingResult {
   finish: Promise<RecordingOptions>;
   proc: ChildProcess;
-  stop: () => void;
+  stop: (now?: boolean) => void;
 }
 
 export interface GIFResult {

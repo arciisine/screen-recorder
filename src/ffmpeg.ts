@@ -28,7 +28,7 @@ export class FFmpegUtil {
 
   private static getCommon(opts: RecordingOptions) {
     return [
-      ...this.getAll(opts.flags || {}, this.recordingArgs.common),
+      ...this.getAll(opts.ffmpeg!.flags || {}, this.recordingArgs.common),
       ...(opts.fps ? ['-r', `${opts.fps}`] : [])
     ];
   }
@@ -46,8 +46,8 @@ export class FFmpegUtil {
   }
 
   static async getWin32Args(opts: RecordingOptions) {
-    const getAll = this.getAll.bind(this, opts.flags || {});
-    const devs = await OSUtil.getWinDevices(opts.ffmpegBinary!, opts.audio);
+    const getAll = this.getAll.bind(this, opts.ffmpeg!.flags || {});
+    const devs = await OSUtil.getWinDevices(opts.ffmpeg!.binary!, opts.audio);
     const out: string[] = [];
     const win = opts.window;
 
@@ -87,8 +87,8 @@ export class FFmpegUtil {
   static async getDarwinArgs(opts: RecordingOptions) {
     const { window: { bounds, screens } } = opts;
 
-    const getAll = this.getAll.bind(this, opts.flags || {});
-    const devs = await OSUtil.getMacInputDevices(opts.ffmpegBinary!, opts.window, opts.audio);
+    const getAll = this.getAll.bind(this, (opts.ffmpeg!.flags) || {});
+    const devs = await OSUtil.getMacInputDevices(opts.ffmpeg!.binary!, opts.window, opts.audio);
 
     const screen = screens.find(s => // Grab screen which has the top-left corner
       bounds.x >= s.x && bounds.x <= s.x + s.width &&
@@ -121,7 +121,7 @@ export class FFmpegUtil {
   }
 
   static async getX11Args(opts: RecordingOptions) {
-    const getAll = this.getAll.bind(this, opts.flags || {});
+    const getAll = this.getAll.bind(this, opts.ffmpeg!.flags || {});
     const out: string[] = [];
     const { bounds } = opts.window;
 
@@ -151,11 +151,12 @@ export class FFmpegUtil {
     return out;
   }
 
-  static async findFFmpegBinIfMissing<T extends { ffmpegBinary?: string }>(opts: T): Promise<T & { ffmpegBinary: string }> {
-    if (!opts.ffmpegBinary) {
-      opts.ffmpegBinary = await OSUtil.findFileOnPath(process.platform === 'win32' ? 'ffmpeg.exe' : 'ffmpeg');
+  static async findFFmpegBinIfMissing<T extends { ffmpeg?: { binary?: string } }>(opts: T): Promise<T & { ffmpeg: { binary: string } }> {
+    if (!opts.ffmpeg || !opts.ffmpeg.binary) {
+      opts.ffmpeg = opts.ffmpeg || {};
+      opts.ffmpeg.binary = await OSUtil.findFileOnPath(process.platform === 'win32' ? 'ffmpeg.exe' : 'ffmpeg');
     }
-    return opts as T & { ffmpegBinary: string };
+    return opts as T & { ffmpeg: { binary: string } };
   }
 
   static async startRecording(options: RecordingOptions): Promise<RecordingResult> {
@@ -176,7 +177,7 @@ export class FFmpegUtil {
         throw new Error(`Unsupported platform: ${process.platform}`);
     }
 
-    const { finish, kill, proc } = await Util.processToPromise(opts.ffmpegBinary, [...args, opts.file]);
+    const { finish, kill, proc } = await Util.processToPromise(opts.ffmpeg.binary, [...args, opts.file]);
     return {
       finish: finish.then(x => opts),
       stop: (now?: boolean) => {
@@ -193,7 +194,7 @@ export class FFmpegUtil {
   static async generateGIF(options: GIFOptions): Promise<GIFResult> {
     const opts = await this.findFFmpegBinIfMissing(options);
 
-    const ffmpeg = opts.ffmpegBinary;
+    const ffmpeg = opts.ffmpeg.binary;
     const { bounds } = opts.window;
 
     let vf = `fps=${opts.fps}`;
@@ -206,7 +207,7 @@ export class FFmpegUtil {
     vf = `${vf}:flags=lanczos`;
 
     const paletteFile = path.resolve(os.tmpdir(), `palette-gen.${Math.random()}.${Date.now()}.png`);
-    const final = opts.file.replace('.mp4', '.gif');
+    const final = opts.output || (/.mp4$/.test(opts.file) ? opts.file.replace('.mp4', '.gif') : `${opts}.gif`);
 
     console.log('vf', vf);
 

@@ -10,7 +10,7 @@ export class Recorder {
     return FFmpegUtil.startRecording(final as RecordingOptions);
   }
 
-  static async recordWindowForPid(pid: number, opts: UserOptions) {
+  static async recordWindowForProcess(pid: number, opts: UserOptions) {
     const final = { ...opts, window: await OSUtil.getWindow(pid) };
     return FFmpegUtil.startRecording(final as RecordingOptions);
   }
@@ -18,8 +18,10 @@ export class Recorder {
   static async recordWindow(opts: RecordingOptions) {
     return FFmpegUtil.startRecording(opts);
   }
+}
 
-  static async generateGIF(opts: GIFOptions) {
+export class GIFCreator {
+  static async generate(opts: GIFOptions) {
     return FFmpegUtil.generateGIF(opts);
   }
 }

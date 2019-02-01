@@ -19,10 +19,9 @@
 			"url": "https://github.com/arciisine"
 		}
 	],
+	"main": "lib/index.js",
 	"files": [
-		"index.js",
-		"index.d.ts",
-		"src/**/*.js"
+		"lib/"
 	],
 	"keywords": [
 		"macos",
