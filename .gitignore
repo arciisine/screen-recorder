@@ -2,3 +2,5 @@ out
 node_modules
 *.vsix
 .DS_STORE
+test*.mp4
+test*.gif

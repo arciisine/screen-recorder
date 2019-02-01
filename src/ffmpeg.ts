@@ -206,9 +206,11 @@ export class FFmpegUtil {
     const paletteFile = path.resolve(os.tmpdir(), `palette-gen.${Math.random()}.${Date.now()}.png`);
     const final = opts.file.replace('.mp4', '.gif');
 
+    console.log('vf', vf);
+
     const { finish: finishPalette } = Util.processToPromise(ffmpeg, [
       '-i', opts.file,
-      '-vf', `${vf}, palettegen = stats_mode = diff`,
+      '-vf', `${vf},palettegen=stats_mode=diff`,
       '-y', paletteFile
     ]);
 
