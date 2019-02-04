@@ -20,18 +20,11 @@ export class FFmpegUtil {
     video: {
       preset: 'ultrafast',
       crf: 10,
-      pix_fmt: 'yuv420p',
+      pix_fmt: 'yuvj444p',
       'c:v': 'libx264',
       y: '',
     }
   };
-
-  private static getCommon(opts: RecordingOptions) {
-    return [
-      ...this.getAll(opts.ffmpeg!.flags || {}, this.recordingArgs.common),
-      ...(opts.fps ? ['-r', `${opts.fps}`] : [])
-    ];
-  }
 
   private static get(src: any, key: string, target: any, customKeyOverride?: string) {
     const val = src[customKeyOverride || key] || target[key];
@@ -43,6 +36,13 @@ export class FFmpegUtil {
       acc.push(...this.get(src, k, target, override ? override(k) : k));
       return acc;
     }, [] as string[]);
+  }
+
+  private static getCommon(opts: RecordingOptions) {
+    return [
+      ...this.getAll(opts.ffmpeg!.flags || {}, this.recordingArgs.common),
+      ...this.getAll(opts.ffmpeg!.flags || {}, { r: opts.fps }),
+    ];
   }
 
   static async getWin32Args(opts: RecordingOptions) {
@@ -57,21 +57,27 @@ export class FFmpegUtil {
 
     out.push(
       ...this.getCommon(opts),
-      '-video_size', `${win.bounds.width}x${win.bounds.height}`,
+      ...getAll({
+        video_size: `${win.bounds.width}x${win.bounds.height}`
+      })
     );
 
     if (opts.audio) {
       out.push(
-        '-f', 'dshow',
-        '-i', `audio="${devs.audio}"`,
+        ...getAll({
+          f: 'dshow',
+          i: `audio="${devs.audio}"`,
+        })
       );
     }
 
     out.push(
-      '-offset_x', `${win.bounds.x}`,
-      '-offset_y', `${win.bounds.y}`,
-      '-f', 'gdigrab',
-      '-i', 'desktop',
+      ...getAll({
+        offset_x: `${win.bounds.x}`,
+        offset_y: `${win.bounds.y}`,
+        f: 'gdigrab',
+        i: 'desktop',
+      }),
       ...getAll(this.recordingArgs.video)
     );
 
@@ -99,11 +105,15 @@ export class FFmpegUtil {
       out.unshift('-t', `${opts.duration}`);
     }
     out.push(
-      '-capture_cursor', '1',
+      ...getAll({
+        capture_cursor: 1
+      }),
       ...this.getCommon(opts),
       // '-video_size', `${bounds.width}x${bounds.height}`,
-      '-f', 'avfoundation',
-      '-i', `${devs.video}:${devs.audio}`
+      ...getAll({
+        f: 'avfoundation',
+        i: `${devs.video}:${devs.audio}`
+      })
     );
 
     if (opts.audio) {
@@ -114,7 +124,9 @@ export class FFmpegUtil {
 
     out.push(
       ...getAll(this.recordingArgs.video),
-      '-vf', `'scale=${screen.width}:${screen.height}:flags=lanczos,crop=${bounds.width}:${bounds.height}:${Math.abs(screen.x - bounds.x)}:${Math.abs(screen.y - bounds.y)}'`
+      ...getAll({
+        vf: `'scale=${screen.width}:${screen.height}:flags=lanczos,crop=${bounds.width}:${bounds.height}:${Math.abs(screen.x - bounds.x)}:${Math.abs(screen.y - bounds.y)}'`
+      })
     );
 
     return out;
@@ -131,15 +143,19 @@ export class FFmpegUtil {
 
     out.push(
       ...this.getCommon(opts),
-      '-video_size', `${bounds.width}x${bounds.height}`,
-      '-f', 'x11grab',
-      '-i', `:0.0+${bounds.x},${bounds.y}`,
+      ...getAll({
+        video_size: `${bounds.width}x${bounds.height}`,
+        f: 'x11grab',
+        i: `:0.0+${bounds.x},${bounds.y}`
+      })
     );
 
     if (opts.audio) {
       out.push(
-        '-f', 'pulse',
-        '-i', 'default',
+        ...getAll({
+          f: 'pulse',
+          i: 'default',
+        }),
         ...getAll(this.recordingArgs.audio),
       );
     }

@@ -1,0 +1,17 @@
+{
+  "travetto.modules": {
+    "base": true,
+    "compiler": true,
+    "exec": true,
+    "registry": true,
+    "test": true,
+    "yaml": true
+  },
+  "chronicler.recording-defaults": {
+    "fps": 10,
+    "countdown": 5,
+    "flags": {
+      "crf": 22
+    }
+  }
+}
