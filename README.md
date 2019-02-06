@@ -118,6 +118,30 @@ interface GIFResult {
 }
 ```
 
+### DownloadUtil
+Additionally, the library supports the ability to dynamically download an ffmpeg binary. This is meant to be used by library consumers to allow for 
+prompting of downloads if the binary is not found.
+
+```typescript
+class DownloadUtil {
+  /**
+   * Will download a component to the specified destination 
+   */
+  static async downloadComponent(opts: {
+    // ffmpeg | ffplay | ffprobe
+    component?: Component,
+    // Where the executable should be stored
+    destination: string,
+    // The version you want installed, defaults to latest
+    version?: string,
+    // The os/arch you want to install, defaults to auto-detect
+    platform?: Platform,
+    // Listen on the download progress with percentage downloaded
+    progress?: (pct: number) => void
+  }):Promise<string>;
+}
+```
+
 ## Example
 
 Recording an active window, and converting to an animated gif
