@@ -68,7 +68,7 @@ export class OSUtil {
     const videoIndex = matchedIndex.toString();
     let audioIndex = 'none';
     if (audio) {
-      const matchedAudioIndex = text.match(/\[(\d+)\]\s+[^\n]*Microphone/ig)!;
+      const matchedAudioIndex = /\[(\d+)\]\s+[^\n]*Microphone/ig.exec(text);
       if (!matchedAudioIndex) {
         throw new Error('Cannot find microphone recording device');
       }
@@ -79,7 +79,7 @@ export class OSUtil {
 
   static async getWinDevices(ffmpegBinary: string, audio = false) {
     const { stderr: text } = await Util.processToStd(ffmpegBinary, ['-f', 'dshow', '-list_devices', 'true', '-i', 'dummy']);
-    const matchedAudio = text.match(/\"(Microphone[^"]+)"/ig)!;
+    const matchedAudio = /\"(Microphone[^"]+)"/ig.exec(text);
     const out: { audio?: string, video?: string } = {};
     if (audio) {
       if (!matchedAudio) {
