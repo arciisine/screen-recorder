@@ -200,7 +200,7 @@ export class FFmpegUtil {
         if (now) {
           kill(now);
         } else {
-          proc.stdin.write('q'); // Send kill command
+          proc.stdin!.write('q'); // Send kill command
         }
       },
       proc

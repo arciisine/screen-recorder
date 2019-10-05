@@ -16,10 +16,11 @@
     "prepublish": "rm -rf lib && tsc"
   },
   "maintainers": [
-  {
-    "name": "Timothy Soehnlin",
-    "url": "https://github.com/arciisine"
-  }],
+    {
+      "name": "Timothy Soehnlin",
+      "url": "https://github.com/arciisine"
+    }
+  ],
   "main": "lib/index.js",
   "files": [
     "lib/"
@@ -33,10 +34,10 @@
     "Leverages FFMpeg to perform screen recordings"
   ],
   "devDependencies": {
-    "@travetto/test": "^0.5.9",
-    "@types/node": "^10.12.18",
+    "@travetto/test": "^1.0.0-beta.1",
+    "@types/node": "^12.7.11",
     "@types/yauzl": "^2.9.1",
-    "typescript": "^3.2.4"
+    "typescript": "^3.6.3"
   },
   "dependencies": {
     "@arcsine/win-info": "^0.1.2",

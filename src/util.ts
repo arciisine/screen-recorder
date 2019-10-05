@@ -11,7 +11,7 @@ export class Util {
       ...opts
     });
 
-    proc.stderr.on('data', x => console.debug(x.toString().trim()));
+    proc.stderr!.on('data', x => console.debug(x.toString().trim()));
 
     const kill = (now: boolean = false) => {
       if (!now) {
@@ -49,10 +49,10 @@ export class Util {
   static async processToStd(cmd: string, args: string[], opts?: child_process.SpawnOptions, throwError = false) {
     const { proc, finish } = await this.processToPromise(cmd, args, opts);
     const output = { stdout: [] as Buffer[], stderr: [] as Buffer[], success: false };
-    proc.stderr.removeAllListeners('data');
+    proc.stderr!.removeAllListeners('data');
 
-    proc.stdout.on('data', v => output.stdout.push(v));
-    proc.stderr.on('data', v => output.stderr.push(v));
+    proc.stdout!.on('data', v => output.stdout.push(v));
+    proc.stderr!.on('data', v => output.stderr.push(v));
 
     try {
       await finish;

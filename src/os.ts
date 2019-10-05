@@ -55,7 +55,7 @@ export class OSUtil {
   static async getMacInputDevices(ffmpegBinary: string, window: win.Response, audio = false) {
     const { stderr: text } = await Util.processToStd(ffmpegBinary, ['-f', 'avfoundation', '-list_devices', 'true', '-i', '""']);
     const matched: string[] = [];
-    text.replace(/\[(\d+)\]\s+Capture\s+Screen/ig, (all, index: string) => {
+    text.replace(/\[(\d+)\]\s+Capture\s+screen/ig, (all, index: string) => {
       matched.push(index);
       return '';
     });
@@ -68,7 +68,7 @@ export class OSUtil {
     const videoIndex = matchedIndex.toString();
     let audioIndex = 'none';
     if (audio) {
-      const matchedAudioIndex = text.match(/\[(\d+)\]\s+Mac[^\n]*Microphone/ig)!;
+      const matchedAudioIndex = text.match(/\[(\d+)\]\s+[^\n]*Microphone/ig)!;
       if (!matchedAudioIndex) {
         throw new Error('Cannot find microphone recording device');
       }
