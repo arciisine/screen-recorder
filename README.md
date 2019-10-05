@@ -2,7 +2,7 @@
 
 `@arcsine/screen-recorder` is a cross-platform library for recording desktop screens. The application relies upon [FFmpeg](https://www.ffmpeg.org/) as the base for recording. The primary functionality of the library is to start and stop recordings for a specific process (or active window). Additionally, the recorder supports audio recording, but has some limitations on macOS.  
 
-OSX requires a [custom build of FFmpeg](https://github.com/arciisine/vscode-chronicler/binaries/osx/ffmpeg) to bypass choppy audio.  More information on the custom build can be found [here](https://trac.ffmpeg.org/ticket/4513))
+OSX requires a [custom build of FFmpeg](https://github.com/arciisine/vscode-chronicler/tree/master/binaries/osx/ffmpeg) to bypass choppy audio.  More information on the custom build can be found [here](https://trac.ffmpeg.org/ticket/4513).
 
 The library works on macOS, Windows and X11-based Desktops (Linux, BSD). Wayland support is missing.
 
