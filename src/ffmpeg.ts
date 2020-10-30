@@ -146,7 +146,7 @@ export class FFmpegUtil {
       ...getAll({
         video_size: `${bounds.width}x${bounds.height}`,
         f: 'x11grab',
-        i: `:0.0+${bounds.x},${bounds.y}`
+        i: `${process.env.DISPLAY || ':0.0'}+${bounds.x},${bounds.y}`
       })
     );
 
