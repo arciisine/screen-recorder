@@ -13,7 +13,7 @@
     "node": ">=8"
   },
   "scripts": {
-    "prepublish": "rm -rf lib && tsc"
+    "prepack": "rm -rf lib && tsc"
   },
   "maintainers": [
     {
@@ -40,7 +40,7 @@
     "typescript": "^3.6.3"
   },
   "dependencies": {
-    "@arcsine/win-info": "^0.2.1",
+    "@arcsine/win-info": "^0.2.4",
     "yauzl": "^2.10.0"
   }
 }
