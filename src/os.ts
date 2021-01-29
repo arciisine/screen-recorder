@@ -47,6 +47,13 @@ export class OSUtil {
       b.height += (b.height % 2);
       b.x -= (b.x % 2);
       b.y -= (b.y % 2);
+      if (process.platform === 'win32') {
+        const multiplier = info.screens[0].scale.x;
+        b.width *= multiplier;
+        b.height *= multiplier;
+        b.x *= multiplier;
+        b.y *= multiplier;
+      }
     }
 
     return info!;

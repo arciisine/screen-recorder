@@ -26,7 +26,7 @@ export class Util {
 
     process.on('exit', done);
 
-    const finish = new Promise<string>((resolve, reject) => {
+    const finish = new Promise<void>((resolve, reject) => {
       proc.once('error', () => {
         reject(new Error(`Cannot start ${cmd}`));
       });
