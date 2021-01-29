@@ -43,17 +43,17 @@ export class OSUtil {
     const b = info.bounds!;
 
     if (process.platform !== 'darwin') {
+      if (process.platform === 'win32') {
+        const multiplier = info.screens[0].scale.x;
+        b.width = Math.trunc(b.width * multiplier);
+        b.height = Math.trunc(b.height * multiplier);
+        b.x = Math.trunc(b.x * multiplier);
+        b.y = Math.trunc(b.y * multiplier);
+      }
       b.width += (b.width % 2);
       b.height += (b.height % 2);
       b.x -= (b.x % 2);
       b.y -= (b.y % 2);
-      if (process.platform === 'win32') {
-        const multiplier = info.screens[0].scale.x;
-        b.width *= multiplier;
-        b.height *= multiplier;
-        b.x *= multiplier;
-        b.y *= multiplier;
-      }
     }
 
     return info!;
