@@ -131,7 +131,7 @@ export class DownloadUtil {
 
     const zipFile = await new Promise<yauzl.ZipFile>(
       (resolve, reject) => yauzl.open(zipLoc, { lazyEntries: true },
-        (err, zip) => err ? reject(err) : resolve(zip)));
+        (err, zip) => err ? reject(err) : resolve(zip!)));
 
     const zipEntry = await new Promise<yauzl.Entry>(
       (resolve, reject) => {
@@ -150,7 +150,7 @@ export class DownloadUtil {
 
     const stream = await new Promise<NodeJS.ReadableStream>((resolve, reject) => {
       zipFile.openReadStream(zipEntry, (err, str) => {
-        err ? reject(err) : resolve(str);
+        err ? reject(err) : resolve(str!);
       });
     });
 
