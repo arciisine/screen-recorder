@@ -6,7 +6,8 @@ export class Util {
 
     console.info([cmd, ...args].join(' '));
 
-    const proc = child_process.spawn(cmd, args, {
+    
+    const proc = child_process.spawn(process.platform === 'win32' ? `"${cmd}"` : cmd, args, {
       shell: true,
       ...opts
     });
