@@ -178,6 +178,10 @@ export class FFmpegUtil {
   static async startRecording(options: RecordingOptions): Promise<RecordingResult> {
     const opts = await this.findFFmpegBinIfMissing(options);
 
+    if (!opts.file) {
+      throw new Error('An output file is required for recording');
+    }
+
     let args: string[];
 
     switch (process.platform) {
@@ -193,7 +197,7 @@ export class FFmpegUtil {
         throw new Error(`Unsupported platform: ${process.platform}`);
     }
 
-    const { finish, kill, proc } = await Util.processToPromise(opts.ffmpeg.binary, [...args, opts.file]);
+    const { finish, kill, proc } = await Util.processToPromise(opts.ffmpeg.binary, [...args, opts.file.includes(' ') ? `"${opts.file}"` : opts.file]);
     return {
       finish: finish.then(x => opts),
       stop: (now?: boolean) => {
