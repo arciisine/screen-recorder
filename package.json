@@ -1,6 +1,6 @@
 {
   "name": "@arcsine/screen-recorder",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Leverages FFMpeg to perform screen recordings",
   "license": "MIT",
   "repository": "arciisine/screen-recorder",
@@ -25,6 +25,7 @@
   "files": [
     "lib/"
   ],
+  "bin": "./lib/cli.js",
   "keywords": [
     "macos",
     "linux",
